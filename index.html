@@ -165,7 +165,7 @@ function togglePlay() {
       noteInOct = note % 12;
       oct = Math.floor(note / 12);
       scaledNote = Math.round(noteInOct / 12.0 * 7.0);
-      return SCALES[scale][scaledNote];
+      return (oct * 12) + SCALES[scale][scaledNote];
     }
   }
 
@@ -181,7 +181,7 @@ function togglePlay() {
       }
       var noteLength = document.getElementById('note_length_' + tick).value;
       var noteValue = document.getElementById('note_value_' + tick).value;
-      var scale = document.getElementById('note_value_' + tick).value;
+      var scale = document.getElementById('scale').value;
 
       noteValue = transposeNote(noteValue, scale);
 
