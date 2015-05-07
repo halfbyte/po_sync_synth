@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta name="viewport" content="width=device-width">
   <meta charset="utf-8">
   <title>Pocket Operator Sync Synth (POSS-01)</title>
   <style type="text/css">
@@ -8,6 +9,14 @@
       background: #eee;
       color: #111;
       font-family: sans-serif;
+    }
+    .button {
+      border: 1px solid black;
+      text-decoration: none;
+      color: #000;
+      background: #fff;
+      border-radius: 5px;
+      padding: 5px;
     }
 
 
@@ -17,7 +26,7 @@
   <h1>Pocket Operator Sync Synth (POSS-01)</h1>
   <p><a href="#help">HELP!</a></p>
 
-  <p><a href="#" id="play">PLAY</a></p>
+  <p><a href="#" class="button" id="play">PLAY</a></p>
 
   <p><label>Tempo: <input type="range" min="40" max="190" step="1" id="tempo"/></label><span id="tempo-val"></span></p>
   <p><label>Scale: <select id="scale">
@@ -147,7 +156,7 @@ var ctx = new AudioContext();
 var tickPanner = fixedPanner(-1);
 tickPanner.connect(ctx.destination);
 
-var intPanner = fixedPanner(-1);
+var intPanner = fixedPanner(1);
 intPanner.connect(ctx.destination);
 
 //osc.start(0);
