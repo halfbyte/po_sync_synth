@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>JS Bin</title>
+</head>
+<body>
+  <p><a href="#" id="play">PLAY</a></p>
+
+  <p><label>Tempo:<input type="range" min="40" max="190" step="1" id="tempo"/></label><span id="tempo-val"></span></p>
+  <p><label>Scale:<select id="scale">
+    <value>min</value>
+    <value>maj</value>
+    <value>crm</value>
+  </select>
+  <table>
+    <tr>
+      <th>#</th>
+      <th>Note</th>
+      <th>Length</th>
+    </tr>
+    <tr>
+      <td>0</td>
+      <td><input type="range" value="0" step="1" min="0" max="127" id="note_value_0" /></td>
+      <td><input type="range" value="0" step="1" min="0" max="4" id="note_length_0" /></td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td><input type="range" value="0" step="1" min="0" max="127" id="note_value_1" /></td>
+      <td><input type="range" value="0" step="1" min="0" max="4" id="note_length_1" /></td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td><input type="range" value="0" step="1" min="0" max="127" id="note_value_2" /></td>
+      <td><input type="range" value="0" step="1" min="0" max="4" id="note_length_2" /></td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td><input type="range" value="0" step="1" min="0" max="127" id="note_value_3" /></td>
+      <td><input type="range" value="0" step="1" min="0" max="4" id="note_length_3" /></td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td><input type="range" value="0" step="1" min="0" max="127" id="note_value_4" /></td>
+      <td><input type="range" value="0" step="1" min="0" max="4" id="note_length_4" /></td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td><input type="range" value="0" step="1" min="0" max="127" id="note_value_5" /></td>
+      <td><input type="range" value="0" step="1" min="0" max="4" id="note_length_5" /></td>
+    </tr>
+    <tr>
+      <td>6</td>
+      <td><input type="range" value="0" step="1" min="0" max="127" id="note_value_6" /></td>
+      <td><input type="range" value="0" step="1" min="0" max="4" id="note_length_6" /></td>
+    </tr>
+    <tr>
+      <td>7</td>
+      <td><input type="range" value="0" step="1" min="0" max="127" id="note_value_7" /></td>
+      <td><input type="range" value="0" step="1" min="0" max="4" id="note_length_7" /></td>
+    </tr>
+    <tr>
+      <td>8</td>
+      <td><input type="range" value="0" step="1" min="0" max="127" id="note_value_8" /></td>
+      <td><input type="range" value="0" step="1" min="0" max="4" id="note_length_8" /></td>
+    </tr>
+    <tr>
+      <td>9</td>
+      <td><input type="range" value="0" step="1" min="0" max="127" id="note_value_9" /></td>
+      <td><input type="range" value="0" step="1" min="0" max="4" id="note_length_9" /></td>
+    </tr>
+    <tr>
+      <td>10</td>
+      <td><input type="range" value="0" step="1" min="0" max="127" id="note_value_10" /></td>
+      <td><input type="range" value="0" step="1" min="0" max="4" id="note_length_10" /></td>
+    </tr>
+    <tr>
+      <td>11</td>
+      <td><input type="range" value="0" step="1" min="0" max="127" id="note_value_11" /></td>
+      <td><input type="range" value="0" step="1" min="0" max="4" id="note_length_11" /></td>
+    </tr>
+    <tr>
+      <td>12</td>
+      <td><input type="range" value="0" step="1" min="0" max="127" id="note_value_12" /></td>
+      <td><input type="range" value="0" step="1" min="0" max="4" id="note_length_12" /></td>
+    </tr>
+    <tr>
+      <td>13</td>
+      <td><input type="range" value="0" step="1" min="0" max="127" id="note_value_13" /></td>
+      <td><input type="range" value="0" step="1" min="0" max="4" id="note_length_13" /></td>
+    </tr>
+    <tr>
+      <td>14</td>
+      <td><input type="range" value="0" step="1" min="0" max="127" id="note_value_14" /></td>
+      <td><input type="range" value="0" step="1" min="0" max="4" id="note_length_14" /></td>
+    </tr>
+    <tr>
+      <td>15</td>
+      <td><input type="range" value="0" step="1" min="0" max="127" id="note_value_15" /></td>
+      <td><input type="range" value="0" step="1" min="0" max="4" id="note_length_15" /></td>
+    </tr>
+  </table>
+
+
+  <script type="text/javascript">
+
+var ctx = new AudioContext();
+var tickPanner = ctx.createStereoPanner();
+tickPanner.pan.value = -1;
+tickPanner.connect(ctx.destination);
+
+var intPanner = ctx.createStereoPanner();
+intPanner.pan.value = 1;
+intPanner.connect(ctx.destination);
+
+//osc.start(0);
+
+
+// merger.connect(ctx.destination, 0, 0);
+
+
+var buffer = ctx.createBuffer(1, 400, ctx.sampleRate);
+var data = buffer.getChannelData(0);
+var TEMPO = 155;
+var stepInterval = 15.000 / TEMPO;
+
+var i;
+
+for(i=0;i<100;i++) {
+  data[i] = 1.0;
+}
+
+var playing = false;
+
+var playButton = document.getElementById('play');
+var tempoSlider = document.getElementById('tempo');
+var tempoDisplay = document.getElementById('tempo-val');
+
+var SCALES = {
+  'min': [0,2,4,5,7,9,11],
+  'maj': [0,2,3,5,7,8,10]
+}
+
+function togglePlay() {
+  playing = !playing;
+  if (!playing) {
+
+    playButton.innerHTML = "PLAY";
+
+    return;
+
+  }
+  playButton.innerHTML = "STOP";
+  nextTick = ctx.currentTime;
+  var tick = 0;
+
+  function note2f(note) {
+    return Math.pow(2, ((note - 69) / 12)) * 440
+  }
+
+  function transposeNote(note, scale) {
+    if (scale === 'crm') {
+      return note;
+    } else {
+      noteInOct = note % 12;
+      oct = Math.floor(note / 12);
+      scaledNote = Math.round(noteInOct / 12.0 * 7.0);
+      return SCALES[scale][scaledNote];
+    }
+  }
+
+  function playTick() {
+    if (!playing) return;
+    if (ctx.currentTime > nextTick - 0.2) {
+      if (tick % 2 === 0) {
+        var src = ctx.createBufferSource();
+        src.buffer = buffer;
+        src.connect(tickPanner);
+        src.start(nextTick);
+        src.stop(nextTick + 0.2);
+      }
+      var noteLength = document.getElementById('note_length_' + tick).value;
+      var noteValue = document.getElementById('note_value_' + tick).value;
+      var scale = document.getElementById('note_value_' + tick).value;
+
+      noteValue = transposeNote(noteValue, scale);
+
+
+      if (noteLength > 0) {
+
+        var osc = ctx.createOscillator();
+        var amp = ctx.createGain();
+        var flt = ctx.createBiquadFilter();
+        osc.connect(flt);
+        flt.connect(amp);
+        amp.connect(intPanner);
+        endTime = nextTick + (stepInterval * noteLength);
+
+
+        osc.frequency.value = note2f(noteValue);
+        osc.type = "sawtooth";
+
+        osc.start(nextTick);
+        osc.stop(endTime);
+
+        flt.Q.value = 10;
+        flt.frequency.setValueAtTime(50, nextTick);
+        flt.frequency.linearRampToValueAtTime(2000, nextTick + 0.1);
+        flt.frequency.setValueAtTime(2000, endTime - 0.1);
+        flt.frequency.linearRampToValueAtTime(50, endTime);
+
+        amp.gain.setValueAtTime(0, nextTick);
+        amp.gain.linearRampToValueAtTime(0.2, nextTick + 0.01);
+        amp.gain.setValueAtTime(0.2, endTime - 0.05);
+        amp.gain.linearRampToValueAtTime(0, endTime);
+
+      }
+
+
+
+      stepInterval = 15.000 / TEMPO;
+      nextTick += stepInterval;
+      tick++;
+      if (tick > 15) tick = 0;
+
+    }
+    setTimeout(playTick, 40);
+  }
+  playTick();
+  updateTempo();
+
+
+}
+
+function updateTempo(e) {
+  TEMPO = tempoSlider.value;
+  tempoDisplay.innerHTML = "" + TEMPO
+}
+
+
+playButton.addEventListener('click', togglePlay);
+
+tempoSlider.addEventListener('change', updateTempo);
+
+  </script>
+</body>
+</html>
