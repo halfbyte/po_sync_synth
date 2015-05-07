@@ -2,13 +2,25 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>JS Bin</title>
+  <title>Pocket Operator Sync Synth (POSS-01)</title>
+  <style type="text/css">
+    body {
+      background: #eee;
+      color: #111;
+      font-family: sans-serif;
+    }
+
+
+  </style>
 </head>
 <body>
+  <h1>Pocket Operator Sync Synth (POSS-01)</h1>
+  <p><a href="#help">HELP!</a></p>
+
   <p><a href="#" id="play">PLAY</a></p>
 
-  <p><label>Tempo:<input type="range" min="40" max="190" step="1" id="tempo"/></label><span id="tempo-val"></span></p>
-  <p><label>Scale:<select id="scale">
+  <p><label>Tempo: <input type="range" min="40" max="190" step="1" id="tempo"/></label><span id="tempo-val"></span></p>
+  <p><label>Scale: <select id="scale">
     <option>min</option>
     <option>maj</option>
     <option>crm</option>
@@ -101,16 +113,41 @@
     </tr>
   </table>
 
+  <section id="help">
+    <h2>Help</h2>
+    <p>This has only been tested on Chrome. This will hopefully change soon.</p>
+    <h3>Using it</h3>
+    <p>Connect your Pocket Operator sync input (left side) to the computer output.</p>
+    <p>Use FX + BPM on the PO to switch to the correct sync mode.</p>
+    <p>If you are using more than one PO chained to each other, use SY5 mode on the first PO</p>
+    <p>If you are using only one PO, use SY4 mode.</p>
+    <p>Press Play on your PO and the click the Play link on this page.</p>
+    <h3>Using the Web Audio Synth</h3>
+    <p>At this point, this is only a proof of concept, it only plays a somewhat musical synth voice.</p>
+    <p>Notes with lengths > 0 are played. Length is given in steps.</p>
+    <p>Use the Scale selector to switch between a <b>min</b>or  or <b>maj</b>or scale or to have the full chromatic MIDI note range available.</p>
 
+  </section>
+
+  <script type="text/javascript" src="js/web_audio_monkeypatch.js"></script>
   <script type="text/javascript">
 
+  function fixedPanner(panning) {
+    var panner = ctx.createPanner();
+    panner.panningModel = 'equalpower';
+    var x = panning,
+      y = 0,
+      z = 1 - Math.abs(panning);
+    panner.setPosition(x,y,z);
+    return panner;
+  }
+
 var ctx = new AudioContext();
-var tickPanner = ctx.createStereoPanner();
-tickPanner.pan.value = -1;
+
+var tickPanner = fixedPanner(-1);
 tickPanner.connect(ctx.destination);
 
-var intPanner = ctx.createStereoPanner();
-intPanner.pan.value = 1;
+var intPanner = fixedPanner(-1);
 intPanner.connect(ctx.destination);
 
 //osc.start(0);
